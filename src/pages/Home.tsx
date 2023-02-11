@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { todosState, addTodos } from "../redux/modules/todos";
+import { addTodos, todoState } from "../redux/modules/todos";
 import Todo from "../components/Todo";
 
 const Home = () => {
@@ -10,7 +10,7 @@ const Home = () => {
   
     const dispatch = useDispatch();
 
-    const todos = useSelector((state : {todos : {counter : number, todos : todosState[]}}) => state.todos);
+    const todoList = useSelector((state : {todos : {counter : number, todos : todoState[]}}) => state.todos);
 
     const titleOnChange = (e : React.ChangeEvent<HTMLInputElement>) : void => {
       setTitleInput(e.target.value);
@@ -18,6 +18,17 @@ const Home = () => {
   
     const descOnChange = (e : React.ChangeEvent<HTMLInputElement>) : void => {
       setDescInput(e.target.value);
+    }
+
+    const onClickAddTodo = () : void => {
+        dispatch(addTodos({
+            isDone : false,
+            title : titleInput,
+            desc : descInput
+        }));
+
+        setTitleInput('');
+        setDescInput('');
     }
   
     return (
@@ -28,16 +39,17 @@ const Home = () => {
           <input value = {titleInput} onChange = {titleOnChange} ref = {inputFocus}/>
           <span>Description : </span>
           <input value = {descInput} onChange = {descOnChange}/>
-          <button onClick = {() => {
-            dispatch(addTodos({
-                isDone : false,
-                title : titleInput,
-                desc : descInput
-            }));
-          }}>Add</button>
+          <button onClick = {() => onClickAddTodo()}>Add</button>
         </div>
         <div>
-            {todos.todos.map((v : todosState) => <Todo key = {v.key} todo = {v}/>)}
+            <div>
+                <h1>Doing</h1>
+                {todoList.todos.filter((val : todoState) => val.isDone === false).map((v : todoState) => <Todo key = {v.key} todo = {v}/>)}
+            </div>
+            <div>
+                <h1>Done</h1>
+                {todoList.todos.filter((val : todoState) => val.isDone === true).map((v : todoState) => <Todo key = {v.key} todo = {v}/>)}
+            </div>
         </div>
       </div>
     );

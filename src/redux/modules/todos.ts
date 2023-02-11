@@ -2,35 +2,35 @@ export const ADD_TODOS = 'todos/ADD_TODOS';
 export const REMOVE_TODOS = 'todos/REMOVE_TODOS';
 export const TOGGLE_TODOS = 'todos/TOGGLE_TODOS';
 
-export interface todosState {
+export interface todoState {
     key? : number,
     isDone : boolean,
     title : string,
     desc : string
 }
 
-export const addTodos = (payload : todosState) : {type : string, payload : todosState} => {
+export const addTodos = (payload : todoState) : {type : string, payload : todoState} => {
     return {
         type : ADD_TODOS,
         payload
     }
 }
 
-export const removeTodos = (payload : number) : {type : string, payload : number} => {
+export const removeTodos = (payload : todoState) : {type : string, payload : todoState} => {
     return {
         type : REMOVE_TODOS,
         payload
     }
 }
 
-export const toggleTodos = (payload : number) : {type : string, payload : number} => {
+export const toggleTodos = (payload : todoState) : {type : string, payload : todoState} => {
     return {
         type : TOGGLE_TODOS,
         payload
     }
 }
 
-export const initialState : {counter : number, todos : todosState[]} = {
+export const initialState : {counter : number, todos : todoState[]} = {
     counter : 2,
     todos : [
         {
@@ -48,14 +48,14 @@ export const initialState : {counter : number, todos : todosState[]} = {
     ]
 }
 
-const todos = (state = initialState, action : {type : string, payload : todosState}) => {
+const todos = (state = initialState, action : {type : string, payload : todoState}) => {
     switch (action.type) {
         case ADD_TODOS:
             return {counter : state.counter + 1, todos : [...state.todos, {...action.payload, key : state.counter}]};
         case REMOVE_TODOS:
-            return state;
+            return {counter : state.counter, todos : [...state.todos.filter(v => v.key !== action.payload.key)]};
         case TOGGLE_TODOS:
-            return state;
+            return {counter : state.counter, todos : [...state.todos.map(v => v.key === action.payload.key ? {...v, isDone : !action.payload.isDone} : v)]};
         default:
             return state;
     }

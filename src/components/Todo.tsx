@@ -1,14 +1,11 @@
-import { todoItem } from "../App";
+import { todosState } from "../redux/modules/todos";
 
-const Todo = ({todo, removeHandler, toggleHandler} : {todo : todoItem, removeHandler : any, toggleHandler : any}) => {
-    return(
+const Todo = ({ todo } : { todo : todosState }) => {
+    return (
         <div>
-            {todo.title}, {todo.desc}, {todo.key}
-            <br/>
-            <button onClick = {() => removeHandler(todo.key)}>Remove</button>
-            {todo.isDone === false ? <button onClick = {() => toggleHandler(todo.key)}>Done</button> : <button onClick = {() => toggleHandler(todo.key)}>Cancel</button>}
+            {todo.title}, {todo.desc}
         </div>
-    );
+    )
 }
 
 export default Todo;

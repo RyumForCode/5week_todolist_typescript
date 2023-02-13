@@ -31,19 +31,13 @@ export const toggleTodos = (payload : todoState) : {type : string, payload : tod
 }
 
 export const initialState : {counter : number, todos : todoState[]} = {
-    counter : 2,
+    counter : 1,
     todos : [
         {
             key : 0,
             isDone : false,
             title : 'Try to learn React.',
             desc : 'This is description.'
-        },
-        {
-            key : 1,
-            isDone : false,
-            title : 'Test',
-            desc : 'Test'
         }
     ]
 }
@@ -53,9 +47,11 @@ const todos = (state = initialState, action : {type : string, payload : todoStat
         case ADD_TODOS:
             return {counter : state.counter + 1, todos : [...state.todos, {...action.payload, key : state.counter}]};
         case REMOVE_TODOS:
-            return {counter : state.counter, todos : [...state.todos.filter(v => v.key !== action.payload.key)]};
+            const removeArr = [...state.todos.filter(v => v.key !== action.payload.key)];
+            return {counter : state.counter, todos : removeArr};
         case TOGGLE_TODOS:
-            return {counter : state.counter, todos : [...state.todos.map(v => v.key === action.payload.key ? {...v, isDone : !action.payload.isDone} : v)]};
+            const toggleArr = [...state.todos.map(v => v.key === action.payload.key ? {...v, isDone : !action.payload.isDone} : v)];
+            return {counter : state.counter, todos : toggleArr};
         default:
             return state;
     }
